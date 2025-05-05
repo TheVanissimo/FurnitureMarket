@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Локации</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .location-card {
+            margin-bottom: 20px;
+        }
+
+        .home-link {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="bg-primary text-white text-center py-4">
+    <h1 class="mb-0">Локации, в которых мы работаем</h1>
+</header>
+
+<div class="container mt-4">
+    <div id="locations-list" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <!-- Карточки локаций вставляются через JS -->
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-light text-center py-3 mt-5">
+    <small>© 2025 МебельМаркет. Все права защищены.</small>
+</footer>
+
+<script>
+    const BASE_API = 'http://127.0.0.1:8000';
+    const API_URL = `${BASE_API}/api`;
+
+    async function fetchLocations() {
+        const res = await fetch(`${API_URL}/locations/`);
+        const data = await res.json();
+        const locations = data.items;
+        const list = document.getElementById('locations-list');
+
+        locations.forEach(loc => {
+            const card = document.createElement('div');
+            card.className = 'col';
+
+            card.innerHTML = `
+                <div class="card location-card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">${loc.city}</h5>
+                        <p class="card-text">${loc.region}</p>
+                        <p class="card-text">${loc.street} ${loc.house}</p>
+                    </div>
+                </div>
+            `;
+
+            list.appendChild(card);
+        });
+    }
+
+    fetchLocations();
+</script>
+
+<a href="index.html" class="btn btn-outline-primary home-link">← Назад к мебели</a>
+
+</body>
+</html>
